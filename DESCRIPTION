@@ -1,0 +1,20 @@
+Package: db2connect
+Type: Package
+Title: Connect to IBM DB2 servers
+Version: 0.2.0
+Author: Johan Junkka
+Maintainer: Johan Junkka <johan.junkka@umu.se>
+Description: Set up a conncetion to a IMB DB2 database using RJDBC.
+License: MIT + file LICENSE
+Encoding: UTF-8
+LazyData: true
+Imports:
+    RJDBC,
+    tibble,
+    DBI
+Suggests:
+    rstudioapi,
+    knitr,
+    rmarkdown
+RoxygenNote: 6.1.0
+VignetteBuilder: knitr
