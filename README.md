@@ -1,20 +1,17 @@
 DB2 connect
 -----
 
-Connects to IBM DB2 database servers, using the [RJDBC](https://www.rforge.net/RJDBC/) package. Integrates with RStudio database connection viewing pane, see: [RStudio Connections Pane](https://db.rstudio.com/rstudio/connections/)
+Connects to IBM DB2 databases, using the [RJDBC](https://www.rforge.net/RJDBC/) package. Integrates with RStudio database connection pane, see: [RStudio Connections Pane](https://db.rstudio.com/rstudio/connections/)
+
 
 ## Requirements
 
 * Java
 * DB2 JDBC Driver see: http://www-01.ibm.com/support/docview.wss?uid=swg21363866
 
-## Installation
-
-```r
-devtools::install_github("junkka/db2connect")
-```
-
 ## Usage
+
+Setting up a connection.
 
 ```r
 library(db2connect)
@@ -27,7 +24,7 @@ conn <- db2_connect(
 ```
 
 
-Get first 10 rows from table test_table in schema test_schema
+Get first 10 rows from table test_table in schema test_schema.
 
 ```r
 db2_query(conn, "SELECT * FROM test_schema.test_table LIMIT 10")
@@ -42,7 +39,25 @@ As [R Markdown supports SQL chunks](https://bookdown.org/yihui/rmarkdown/languag
     ```
 
 
-Then close connection
+List schemas in database.
+
+```r
+db2_list_objects(conn)
+```
+
+List tables in a specific schema.
+
+```r
+db2_list_objects(conn, schema = "test_schema")
+```
+
+List column and column types in a table.
+
+```r
+db2_list_columns(conn, schema = "test_schema", table = "test_table")
+```
+
+Close the connection.
 
 ```r
 db2_close(conn)
@@ -69,6 +84,7 @@ All these arguments can be set beforehand using `options`
     options("db2.password" = "secret-password")
     options("db2.server_address" = "serveradress:port")
     options("db2.driver_path" = "path/to/driver")
+
 
 The password argument also accept quoted functions, thus, one can pass in passwords from a [keyring](https://db.rstudio.com/best-practices/managing-credentials/). For example:
 

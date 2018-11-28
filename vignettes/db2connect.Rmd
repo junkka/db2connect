@@ -18,7 +18,7 @@ chunk <- "```"
 ```
 
 
-Connects to IBM DB2 database servers, using the [RJDBC](https://www.rforge.net/RJDBC/) package. Integrates with RStudio database connection viewing pane, see: [RStudio Connections Pane](https://db.rstudio.com/rstudio/connections/)
+Connects to IBM DB2 databases, using the [RJDBC](https://www.rforge.net/RJDBC/) package. Integrates with RStudio database connection pane, see: [RStudio Connections Pane](https://db.rstudio.com/rstudio/connections/)
 
 
 ## Requirements
@@ -27,6 +27,8 @@ Connects to IBM DB2 database servers, using the [RJDBC](https://www.rforge.net/R
 * DB2 JDBC Driver see: http://www-01.ibm.com/support/docview.wss?uid=swg21363866
 
 ## Usage
+
+Setting up a connection.
 
 ```{r, eval = FALSE}
 library(db2connect)
@@ -39,7 +41,7 @@ conn <- db2_connect(
 ```
 
 
-Get first 10 rows from table test_table in schema test_schema
+Get first 10 rows from table test_table in schema test_schema.
 
 ```{r, eval = FALSE}
 db2_query(conn, "SELECT * FROM test_schema.test_table LIMIT 10")
@@ -54,7 +56,25 @@ As [R Markdown supports SQL chunks](https://bookdown.org/yihui/rmarkdown/languag
     `r chunk`
 
 
-Then close connection
+List schemas in database.
+
+```{r, eval = FALSE}
+db2_list_objects(conn)
+```
+
+List tables in a specific schema.
+
+```{r, eval = FALSE}
+db2_list_objects(conn, schema = "test_schema")
+```
+
+List column and column types in a table.
+
+```{r, eval = FALSE}
+db2_list_columns(conn, schema = "test_schema", table = "test_table")
+```
+
+Close the connection.
 
 ```{r, eval = FALSE}
 db2_close(conn)
