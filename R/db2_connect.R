@@ -53,7 +53,7 @@ db2_connect <- function(
                    user=username,
                    password=password)
 
-  conn@identifier.quote <- db_name
+  conn@identifier.quote <- paste(db_name, server_address)
   hostn <- file.path("jdbc:db2:/", server_address, db_name)
 
   code <- paste0('conn <- db2connect::db2_connect(db_name = "', db_name,'",
@@ -69,14 +69,14 @@ db2_connect <- function(
 }
 
 
-on_conn_open <- function(conn, code, db_name){
+on_conn_open <- function(conn, code){
 
   observer <- getOption("connectionObserver")
   if (!is.null(observer))
     observer$connectionOpened(
       type = "DB2JDBC",
-      displayName = paste("DB2 JDBC", db_name),
-      host = db_name,
+      displayName = paste("DB2-JDBC", conn@identifier.quote),
+      host = conn@identifier.quote,
       icon = system.file("img", "db2-ui.png", package="db2connect"),
       disconnect = function(){
         db2_close(conn)
