@@ -20,18 +20,19 @@ db2_connect <- function(
   driver_path = NULL
 ){
 
-  if (is.null(db_name)){
-    db_name <- getOption('db2.db_name')
-    if (is.null(db_name)) stop("db_name is NULL. Requires a db_name")
-  }
-  if (is.null(username)){
-    username <- getOption('db2.username')
-    if (is.null(username)) stop("username is NULL. Requires a username")
-  }
+  
+  db_name <- db_name %||% 
+    getOption('db2.db_name') %||% 
+    stop("db_name is NULL. Requires a db_name")
+  
+  
+  username <- username %||% 
+    getOption('db2.username') %||% 
+    stop("username is NULL. Requires a username")
 
   server_address = server_address %||%
-    getOption("db2.server_address")
-  if (is.null(server_address)) stop("server_address is NULL. Requires a server address")
+    getOption("db2.server_address") %||% 
+    stop("server_address is NULL. Requires a server address")
 
   password <- password %||%
     getOption('db2.password') %||%
@@ -56,13 +57,13 @@ db2_connect <- function(
   conn@identifier.quote <- paste(db_name, server_address)
   hostn <- file.path("jdbc:db2:/", server_address, db_name)
 
-  code <- paste0('conn <- db2connect::db2_connect(db_name = "', db_name,'",
-    username = "', username,'",
-    server_address = "', server_address,'",
-    driver_path = "', driver_path, '"
-  )')
+  code <- 'conn <- db2connect::db2_connect(db_name = "' %+% db_name %+% '" 
+    username = "' %+% username %+%'",
+    server_address = "' %+% server_address %+% '",
+    driver_path = "' %+% driver_path %+% '"
+  )'
 
-  on_conn_open(conn, code, db_name)
+  on_conn_open(conn, code)
 
   conn
 
@@ -117,7 +118,15 @@ db2_preview_object <- function(conn, schema, table, limit = 10){
 #' @export
 
 db2_list_columns <- function(conn, schema, table){
-  columns <- db2_query(conn, paste0("Select distinct(name), ColType from Sysibm.syscolumns where tbname = '", table,"' and tbcreator = '", schema,"'"))
+  columns <- db2_query(
+    conn, 
+    paste0(
+      "Select distinct(name), ColType from Sysibm.syscolumns where tbname = '", 
+      table,
+      "' and tbcreator = '", 
+      schema,"'"
+    )
+  )
   names(columns) <- c("name", "type")
   columns
 }
@@ -197,4 +206,8 @@ db2_query <- function(conn, qu){
   }
 }
 
+
+`%+%` <- function(x, y){
+  paste0(x, y)
+}
 
