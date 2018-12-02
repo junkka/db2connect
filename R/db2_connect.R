@@ -57,7 +57,7 @@ db2_connect <- function(
   conn@identifier.quote <- paste(db_name, server_address)
   hostn <- file.path("jdbc:db2:/", server_address, db_name)
 
-  code <- 'conn <- db2connect::db2_connect(db_name = "' %+% db_name %+% '" 
+  code <- 'conn <- db2connect::db2_connect(db_name = "' %+% db_name %+% '", 
     username = "' %+% username %+%'",
     server_address = "' %+% server_address %+% '",
     driver_path = "' %+% driver_path %+% '"
